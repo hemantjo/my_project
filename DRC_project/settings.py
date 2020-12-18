@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'DRC_project.app',
+    'axes',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -50,6 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'DRC_project.urls'
@@ -70,7 +73,34 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'DRC_project.wsgi.application'
+
+AUTHENTICATION_BACKENDS = [
+    # AxesBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
+    'axes.backends.AxesBackend',
+
+    # Django ModelBackend is the default authentication backend.
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    'axes_cache': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
+AXES_ONLY_USER_FAILURES = True
+AXES_LOGIN_FAILURE_LIMIT = 3
+AXES_USERNAME_FORM_FIELD = 'email'
+AXES_LOCK_OUT_AT_FAILURE = True
+# AXES_COOLOFF_TIME = 1  # one hour (Integer values define only hours in AXES)
+AXES_COOLOFF_TIME = timedelta(minutes=5)  # 15 minutes (as timedelta object for minutes)
+AXES_LOCKOUT_TEMPLATE = 'locked.html'
+AXES_CACHE = 'axes'
 
 
 # Database
@@ -131,3 +161,5 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_URL = "/signin"

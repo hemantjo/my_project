@@ -1,0 +1,37 @@
+{% extends "base.html"  %} {% load static %}  {% block content %}
+
+   
+    
+	<section class="product-area section_gap">
+		<!-- uploads here -->
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-6 text-center">
+						<div class="section-title">
+							<h1>
+								Uploads
+							</h1>
+							<hr>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					{% for upload in uploads %}
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<img class="img-fluid" src="{{upload.image.url}}" alt="">
+							<div class="product-details">
+								<h6>{{upload.file_name}}</h6>
+							</div>
+						</div>
+					</div>
+					{% empty %}
+						<img class="img_center" src="{% static 'img/no-product.png' %}" alt="">
+					{% endfor %}					
+				</div>
+			</div>
+	</section>
+	<!-- end uploads here -->
+
+{% endblock %}

@@ -18,10 +18,14 @@
                     <div class="mb-30">
                         {% if not_authenticated %}
                         <h6 class="text-center nonecase-font" style="color:#ec7048;"> Invalid Email or
-                            Password detected!</h6>
+							Password detected!</h6>
+						{% elif locked_out %}
+							<h6 class="text-center nonecase-font txt-grey"> Your account has been locked out because of too many failed login attempts. </h6>
                         {% else %}
                         <h6 class="text-center nonecase-font txt-grey"> Enter your details below </h6>
-                        {% endif %}
+						{% endif %}
+						
+
                     </div>
                     <form class="row login_form" action="{% url 'myapp:signin' %}" method="post" id="contactForm" novalidate="novalidate">
                         {% csrf_token %}

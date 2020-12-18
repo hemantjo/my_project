@@ -53,57 +53,19 @@
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav ml-auto">
-							<li class="nav-item"><a class="nav-link" href="">Home</a></li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Categories</a>
-								<ul class="dropdown-menu" id="split_column">
-									{% for category in categories %}
-									<li class="nav-item"><a class="nav-link" href="">{{category.name}}</a></li>
-									{% endfor %}
-								</ul>
-							</li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Brands</a>
-								<ul class="dropdown-menu" id="split_column">
-									{% for brand in brands %}
-									<li class="nav-item"><a class="nav-link" href="">{{brand.name}}</a></li>
-									{% endfor %}
-								</ul>
-							</li>
-
+							<li class="nav-item"><a class="nav-link" href="{% url 'myapp:home' %}">Home</a></li>
 							{% if user.is_authenticated %}
-								<li class="nav-item submenu dropdown">
-									<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-									aria-expanded="false">Account</a>
-									<ul class="dropdown-menu" id="split_column">
-										<li class="nav-item"><a class="nav-link" href="">Profile</a></li>
-										<li class="nav-item"><a class="nav-link" href="">Logout</a></li>
-									</ul>
-								</li>
+							<li class="nav-item"><a class="nav-link" href="" aria-pressed="true" data-toggle="modal"
+								data-target="#myModal">Upload Images</a></li>
+							<li class="nav-item"><a class="nav-link" href="{% url 'myapp:signout' %}">Logout</a></li>	
 							{% else %}
-								<li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+								<li class="nav-item"><a class="nav-link" href="{% url 'myapp:signin' %}">Login</a></li>
+								<li class="nav-item"><a class="nav-link" href="{% url 'myapp:signup' %}">Register</a></li>
 							{% endif %}
-						</ul>
-						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="" class="cart"><span class="ti-bag" aria-hidden="true"> ({{cart_count}})</span></a></li>
-							<li class="nav-item">
-								<button class="search"><span class="lnr lnr-magnifier" aria-hidden="true" id="search"></span></button>
-							</li>
 						</ul>
 					</div>
 				</div>
 			</nav>
-		</div>
-		<div class="search_input" id="search_input_box">
-			<div class="container">
-				<form class="d-flex justify-content-between" role="search" method="get" action="">
-					<input type="text" class="form-control" id="search_input" name="q" value="" placeholder="Search Here">
-					<button type="submit" class="btn"></button>
-					<span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
-				</form>
-			</div>
 		</div>
 	</header>
 	<!-- End Header Area -->
@@ -115,7 +77,38 @@
 			</div>
 		</div>
 	</section>
-    <!-- End Banner Area -->
+	<!-- End Banner Area -->
+	<div class="modal" id="myModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">Upload Images</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<form method="post" enctype="multipart/form-data" action="{% url 'myapp:upload'%}">
+					<!-- Modal body -->
+					<div class="modal-body">
+
+						{% csrf_token %}
+						<div class="form-group">
+							<input class="form-control" type="type" id="name" name="name" placeholder="Enter File Name">
+							<br>
+
+							<input type="file" id="img" name="img" accept="image/*">
+						</div>
+					</div>
+
+					<!-- Modal footer -->
+					<div class="modal-footer text-left">
+
+						<button type="submit" class="primary-btn">Upload</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
     {% block content %} {% endblock %}
 
