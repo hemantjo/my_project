@@ -1,4 +1,11 @@
 # my_project
+
+First make a virtualenv with command:
+
+1. python -m venv your_venv
+2. Then activate that venv, and after activating follow the below steps
+
+
 Step 1- 
   pip install -r requirements.txt
 
