@@ -42,7 +42,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_table = "user"
 
     email = models.EmailField(_('email address'), unique=True)
-    ip = models.GenericIPAddressField()
     is_staff = models.BooleanField(default=False, blank=True, null=True)
 
     objects = UserManager()
@@ -51,24 +50,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.first_name
+        return self.email
 
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-    def get_full_name(self):
-        '''
-        Returns the first_name plus the last_name, with a space in between.
-        '''
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
+    # def get_full_name(self):
+    #     '''
+    #     Returns the first_name plus the last_name, with a space in between.
+    #     '''
+    #     full_name = '%s %s' % (self.first_name, self.last_name)
+    #     return full_name.strip()
 
-    def get_short_name(self):
-        '''
-        Returns the short name for the user.
-        '''
-        return self.first_name
+    # def get_short_name(self):
+    #     '''
+    #     Returns the short name for the user.
+    #     '''
+    #     return self.email
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         '''

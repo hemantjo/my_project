@@ -1,34 +1,29 @@
-from django.shortcuts import render
-from .forms import SigninForm, SignupForm
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from .models import User
 
 # Create your views here.
 def signin(request):
     if request.method=="POST":
-        form = SigninForm(request.POST)
-        username = form["username"].value()
-        password = form["password"].value()
-        user = authenticate(request, username=username,  password=password)
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, email=email,  password=password)
         if user is not None:
             login(request, user)
-            return redirect("myshop:home")
+            return redirect("myapp:signup")
         else:
-            messages.error(request, "Invalid Username or Password")
-    else:
-        form = SigninForm()
-    context = {"form": form} 
-    return render(request, "signin.html", context)
+            return render(request, 'signin.html', {"not_authenticated": True})
+    return render(request, "signin.html")
 
 def signup(request):
-    if request.method == "POST":
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            messages.success(request, "User saved")
-            return redirect("myshop:signin")
-        else:
-            messages.error(request, "Error in form")
-    else:
-        form = SignupForm()
-    context = {"form": form}
-    return render(request, "shop/signup.html", context)
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        try:
+            user_signup = User(email=email, password=password)
+            user_signup.set_password(password)
+            user_signup.save()
+        except Exception as e:
+            print(e)
+        return redirect("myapp:signin")
+    return render(request, "signup.html")
